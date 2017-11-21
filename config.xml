@@ -85,4 +85,5 @@
     </platform>
     <plugin name="cordova-sms-plugin" spec="~0.1.11" />
     <plugin name="cordova-plugin-sms-receiver" spec="~0.1.6" />
+    <plugin name="cordova-plugin-background-mode" />
 </widget>

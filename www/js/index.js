@@ -94,6 +94,21 @@ function kiemtra() {
 }
 
 function startSms() {
+    SmsReceiver.startReception(pushMsgs, () => {
+      alert("Error while receiving messages")
+    })
+}
+
+function pushMsgs(messageBody, originatingAddress) {
+    alert(messageBody,originatingAddress);
+}
+
+
+function startInBackground() {
+    cordova.plugins.backgroundMode.enable();
+}
+
+function startSms1() {
     SmsReceiver.startReception(({messageBody, originatingAddress}) => {
       alert(messageBody)
     }, () => {
