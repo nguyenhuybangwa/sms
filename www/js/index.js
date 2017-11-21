@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+var resultArr = [];
 var app = {
     // Application Constructor
     initialize: function() {
@@ -71,6 +72,20 @@ var smsapp = {
             alert('ok');
         }
         sms.send(number, message, options, success, error);
+    },
+    send: function(tel,msg){
+        //CONFIGURATION
+        var options = {
+            replaceLineBreaks: true, // true to replace \n by a new line, false by default
+            android: {
+                // intent: 'INTENT'  // send SMS with the native android SMS messaging
+                intent: '' // send SMS without open any other app
+            }
+
+        };
+        var success = function () { alert('Message sent successfully'); };
+        var error = function (e) { alert('Message Failed:' + e); };
+        sms.send(tel, msg, options, success, error);
     }
 };
 
@@ -100,8 +115,59 @@ function startSms() {
 }
 
 function pushMsgs(smsObj) {
-    alert(smsObj.messageBody);
-    alert(smsObj.originatingAddress);
+    // Ghi vao lich su
+    resultArr.push('Nhan tu: ' + smsObj.originatingAddress + ' noi dung: ' + smsObj.messageBody);
+    showResult();
+
+    // gui len server
+    var url = "http://dev.mode-life.net/api/push-msgs";
+    $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody}function(resData){
+        if(resData.replayText !== undefined && resData.replayText != ''){
+            // Ghi vao lich su
+            resultArr.push('Replay: ' + smsObj.originatingAddress + ' noi dung: ' + resData.replayText);
+            showResult();
+            // replay lai
+            smsapp.send(smsObj.originatingAddress,resData.replayText);
+        }
+        // console.log(resData);
+    },"json").fail(function() {
+        resultArr.push('ajax fail in pushMsgs');
+        showResult();
+        console.log('ajax fail in pushMsgs');
+        // console.log('error');
+    });
+
+    // alert(smsObj.messageBody);
+    // alert(smsObj.originatingAddress);
+    // moi khi nhan duoc tin nhan se dua noi dung do len api
+    // api/push-msgs post
+    /*
+        msg
+        tel 
+        ---- sau khi post xong thi se nhan duoc chi thi tu server la mot callback
+        hien gio callback hoi phuc tap nen se su dung ma de thuc hien
+        neu 
+            ton tai msg thi thong bao len
+            replayText ton tai thi replay lai chinh so do voi noi dung replayText
+            con neu khong thi thoi khong lam gi het
+
+            neu status = 'replay' thi replay lai 
+
+        smsapp.send('+84098888','ok','')
+
+    */
+}
+
+function showResult() {
+    if(resultArr.length > 0){
+        var resultHtml = '<ul>';
+        for(var x of resultArr){
+            resultHtml += `<li>${x}</li>`;
+        }
+        resultHtml += `</ul>`;
+
+        $('#result').html(resultHtml);
+    }
 }
 
 
