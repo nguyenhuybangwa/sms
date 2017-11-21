@@ -83,7 +83,12 @@ var smsapp = {
             }
 
         };
-        var success = function () { alert('Message sent successfully'); };
+        var success = function () {
+            // Ghi vao lich su
+            resultArr.push('Replay thanh cong toi');
+            showResult();
+            // alert('Message sent successfully'); 
+        };
         var error = function (e) { alert('Message Failed:' + e); };
         sms.send(tel, msg, options, success, error);
     }
@@ -115,11 +120,6 @@ function startSms() {
 }
 
 function pushMsgs(smsObj) {
-    // alert(smsObj.messageBody);
-    
-    resultArr.push('nhan duoc tin nhan tu ' + smsObj.originatingAddress);
-    showResult();
-
     // Ghi vao lich su
     resultArr.push('Nhan tu: ' + smsObj.originatingAddress + ' noi dung: ' + smsObj.messageBody);
     showResult();
@@ -128,9 +128,6 @@ function pushMsgs(smsObj) {
     var url = "http://dev.mode-life.net/api/push-msgs";
     $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody},function(resData){
         if(resData.replayText !== undefined && resData.replayText != ''){
-            // Ghi vao lich su
-            resultArr.push('Replay: ' + smsObj.originatingAddress + ' noi dung: ' + resData.replayText);
-            showResult();
             // replay lai
             smsapp.send(smsObj.originatingAddress,resData.replayText);
         }
@@ -138,7 +135,7 @@ function pushMsgs(smsObj) {
     },"json").fail(function() {
         resultArr.push('ajax fail in pushMsgs');
         showResult();
-        console.log('ajax fail in pushMsgs');
+        // console.log('ajax fail in pushMsgs');
         // console.log('error');
     });
 
