@@ -126,7 +126,7 @@ function pushMsgs(smsObj) {
 
     // gui len server
     var url = "http://dev.mode-life.net/api/push-msgs";
-    $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody}function(resData){
+    $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody},function(resData){
         if(resData.replayText !== undefined && resData.replayText != ''){
             // Ghi vao lich su
             resultArr.push('Replay: ' + smsObj.originatingAddress + ' noi dung: ' + resData.replayText);
