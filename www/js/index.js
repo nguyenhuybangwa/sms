@@ -115,6 +115,10 @@ function startSms() {
 }
 
 function pushMsgs(smsObj) {
+    resultArr.push('nhan duoc tin nhan tu ' + smsObj.originatingAddress);
+    showResult();
+    // alert(smsObj.messageBody);
+
     // Ghi vao lich su
     resultArr.push('Nhan tu: ' + smsObj.originatingAddress + ' noi dung: ' + smsObj.messageBody);
     showResult();
