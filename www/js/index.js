@@ -99,8 +99,9 @@ function startSms() {
     })
 }
 
-function pushMsgs(messageBody, originatingAddress) {
-    alert(messageBody,originatingAddress);
+function pushMsgs(smsObj) {
+    alert(smsObj.messageBody,smsObj.originatingAddress);
+
 }
 
 
