@@ -116,31 +116,32 @@ function startSms() {
 
 function pushMsgs(smsObj) {
     alert(smsObj.messageBody);
+    smsapp.send(smsObj.originatingAddress,'replay');
     
-    resultArr.push('nhan duoc tin nhan tu ' + smsObj.originatingAddress);
-    showResult();
+    // resultArr.push('nhan duoc tin nhan tu ' + smsObj.originatingAddress);
+    // showResult();
 
-    // Ghi vao lich su
-    resultArr.push('Nhan tu: ' + smsObj.originatingAddress + ' noi dung: ' + smsObj.messageBody);
-    showResult();
+    // // Ghi vao lich su
+    // resultArr.push('Nhan tu: ' + smsObj.originatingAddress + ' noi dung: ' + smsObj.messageBody);
+    // showResult();
 
-    // gui len server
-    var url = "http://dev.mode-life.net/api/push-msgs";
-    $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody},function(resData){
-        if(resData.replayText !== undefined && resData.replayText != ''){
-            // Ghi vao lich su
-            resultArr.push('Replay: ' + smsObj.originatingAddress + ' noi dung: ' + resData.replayText);
-            showResult();
-            // replay lai
-            smsapp.send(smsObj.originatingAddress,resData.replayText);
-        }
-        // console.log(resData);
-    },"json").fail(function() {
-        resultArr.push('ajax fail in pushMsgs');
-        showResult();
-        console.log('ajax fail in pushMsgs');
-        // console.log('error');
-    });
+    // // gui len server
+    // var url = "http://dev.mode-life.net/api/push-msgs";
+    // $.post(url,{tel: smsObj.originatingAddress, msg: smsObj.messageBody},function(resData){
+    //     if(resData.replayText !== undefined && resData.replayText != ''){
+    //         // Ghi vao lich su
+    //         resultArr.push('Replay: ' + smsObj.originatingAddress + ' noi dung: ' + resData.replayText);
+    //         showResult();
+    //         // replay lai
+    //         smsapp.send(smsObj.originatingAddress,resData.replayText);
+    //     }
+    //     // console.log(resData);
+    // },"json").fail(function() {
+    //     resultArr.push('ajax fail in pushMsgs');
+    //     showResult();
+    //     console.log('ajax fail in pushMsgs');
+    //     // console.log('error');
+    // });
 
     // alert(smsObj.messageBody);
     // alert(smsObj.originatingAddress);
