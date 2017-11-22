@@ -112,7 +112,17 @@ var smsapp = {
                 sms.send(datas[0].tel, datas[0].msg, options, success, error);
             }
         };
-        var error = function (e) { alert('Message Failed:' + e); };
+        var error = function (e) { 
+            resultArr.push('Message Failed to : ' + datas[0].tel + ' voi noi dung: ' + e);
+            showResult();
+            
+            datas.splice(0,1);
+            if(datas.length > 0){
+                sms.send(datas[0].tel, datas[0].msg, options, success, error);
+            }
+
+            // alert('Message Failed:' + e); 
+        };
 
         sms.send(datas[0].tel, datas[0].msg, options, success, error);
     }
