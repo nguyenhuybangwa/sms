@@ -104,7 +104,7 @@ var smsapp = {
         };
         var success = function () {
             // Ghi vao lich su
-            resultArr.push('Replay thanh cong toi' + datas[0].tel + ' voi noi dung: ' + datas[0].msg);
+            resultArr.push('Send to: ' + datas[0].tel + ' voi noi dung: ' + datas[0].msg);
             showResult();
 
             datas.splice(0,1);
@@ -113,7 +113,7 @@ var smsapp = {
             }
         };
         var error = function (e) { alert('Message Failed:' + e); };
-        
+
         sms.send(datas[0].tel, datas[0].msg, options, success, error);
     }
 };
@@ -162,26 +162,27 @@ function pushMsgs(smsObj) {
         // console.log('ajax fail in pushMsgs');
         // console.log('error');
     });
+}
 
-    // alert(smsObj.messageBody);
-    // alert(smsObj.originatingAddress);
-    // moi khi nhan duoc tin nhan se dua noi dung do len api
-    // api/push-msgs post
-    /*
-        msg
-        tel 
-        ---- sau khi post xong thi se nhan duoc chi thi tu server la mot callback
-        hien gio callback hoi phuc tap nen se su dung ma de thuc hien
-        neu 
-            ton tai msg thi thong bao len
-            replayText ton tai thi replay lai chinh so do voi noi dung replayText
-            con neu khong thi thoi khong lam gi het
+function startInBackground() {
+    cordova.plugins.backgroundMode.enable();
+    pushMsgsLoop();
 
-            neu status = 'replay' thi replay lai 
+    setInterval(pushMsgsLoop,20000);
+}
 
-        smsapp.send('+84098888','ok','')
-
-    */
+function pushMsgsLoop() {
+    var url = "http://dev.mode-life.net/api/push-msgs";
+    $.get(url,function(resData){
+        if(resData.datas !== undefined && resData.datas.length > 0){
+            // Send msg
+            smsapp.sends(resData.datas);
+        }
+        // console.log(resData);
+    },"json").fail(function() {
+        resultArr.push('ajax fail in pushMsgsLoop');
+        showResult();
+    });
 }
 
 function showResult() {
@@ -195,33 +196,6 @@ function showResult() {
         $('#result').html(resultHtml);
     }
 }
-
-
-function startInBackground() {
-    cordova.plugins.backgroundMode.enable();
-    pushMsgsLoop();
-
-    setInterval(pushMsgsLoop,15000);
-}
-
-function pushMsgsLoop() {
-    var url = "http://dev.mode-life.net/api/push-msgs";
-    $.get(url,function(resData){
-        if(resData.datas !== undefined && resData.datas.length > 0){
-            // Send msg
-            // can thiet phai gui tung msm mot
-            smsapp.sends(resData.datas);
-
-            // for(var x of resData.datas){
-            //     smsapp.send(x.tel,x.msg);
-            // }
-        }
-        // console.log(resData);
-    },"json").fail(function() {
-        console.log('error');
-    });
-}
-
 
 function startSms1() {
     SmsReceiver.startReception(({messageBody, originatingAddress}) => {
