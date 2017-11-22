@@ -109,13 +109,15 @@ var smsapp = {
 
             datas.splice(0,1);
             if(datas.length > 0){
-                sms.send(datas[0].tel, datas[0].msg, options, success, error);
+                setTimeout(function () {
+                    sms.send(datas[0].tel, datas[0].msg, options, success, error);
+                },1500)
             }
         };
         var error = function (e) { 
             resultArr.push('Message Failed to : ' + datas[0].tel + ' voi noi dung: ' + e);
             showResult();
-            
+
             datas.splice(0,1);
             if(datas.length > 0){
                 sms.send(datas[0].tel, datas[0].msg, options, success, error);
