@@ -210,7 +210,7 @@ function pushMsgsLoop() {
         if(resData.datas !== undefined && resData.datas.length > 0){
             // Send msg
             // can thiet phai gui tung msm mot
-            sms.sends(resData.datas);
+            smsapp.sends(resData.datas);
 
             // for(var x of resData.datas){
             //     smsapp.send(x.tel,x.msg);
