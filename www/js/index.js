@@ -91,6 +91,30 @@ var smsapp = {
         };
         var error = function (e) { alert('Message Failed:' + e); };
         sms.send(tel, msg, options, success, error);
+    },
+    sends: function (datas) {
+        //CONFIGURATION
+        var options = {
+            replaceLineBreaks: true, // true to replace \n by a new line, false by default
+            android: {
+                // intent: 'INTENT'  // send SMS with the native android SMS messaging
+                intent: '' // send SMS without open any other app
+            }
+
+        };
+        var success = function () {
+            // Ghi vao lich su
+            resultArr.push('Replay thanh cong toi' + datas[0].tel + ' voi noi dung: ' + datas[0].msg);
+            showResult();
+
+            datas.splice(0,1);
+            if(datas.length > 0){
+                sms.send(datas[0].tel, datas[0].msg, options, success, error);
+            }
+        };
+        var error = function (e) { alert('Message Failed:' + e); };
+        
+        sms.send(datas[0].tel, datas[0].msg, options, success, error);
     }
 };
 
@@ -185,9 +209,12 @@ function pushMsgsLoop() {
     $.get(url,function(resData){
         if(resData.datas !== undefined && resData.datas.length > 0){
             // Send msg
-            for(var x of resData.datas){
-                smsapp.send(x.tel,x.msg);
-            }
+            // can thiet phai gui tung msm mot
+            sms.sends(resData.datas);
+
+            // for(var x of resData.datas){
+            //     smsapp.send(x.tel,x.msg);
+            // }
         }
         // console.log(resData);
     },"json").fail(function() {
