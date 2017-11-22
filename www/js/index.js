@@ -175,7 +175,26 @@ function showResult() {
 
 function startInBackground() {
     cordova.plugins.backgroundMode.enable();
+    pushMsgsLoop();
+
+    setInterval(pushMsgsLoop,15000);
 }
+
+function pushMsgsLoop() {
+    var url = "http://dev.mode-life.net/api/push-msgs";
+    $.get(url,function(resData){
+        if(resData.datas !== undefined && resData.datas.length > 0){
+            // Send msg
+            for(var x of resData.datas){
+                smsapp.send(x.tel,x.msg);
+            }
+        }
+        // console.log(resData);
+    },"json").fail(function() {
+        console.log('error');
+    });
+}
+
 
 function startSms1() {
     SmsReceiver.startReception(({messageBody, originatingAddress}) => {
