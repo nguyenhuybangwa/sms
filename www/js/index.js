@@ -49,6 +49,11 @@ var app = {
     }
 };
 
+function showTextInConsole() {
+    alert('showTextInConsole');
+    console.log('showTextInConsole');
+}
+
 var smsapp = {
     sendSms: function() {
         var number = document.getElementById('numberTxt').value.toString(); /* iOS: ensure number is actually a string */
